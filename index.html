@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marcador</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .marcador {
+            display: inline-block;
+            text-align: left;
+            border: 1px solid #000;
+            padding: 20px;
+        }
+        .marcador div {
+            margin: 10px 0;
+        }
+        button {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="marcador">
+        <div>Total Partidas: <span id="total-partidas">0</span></div>
+        <div>Partidas Ganadas: <span id="partidas-ganadas">0</span></div>
+        <div>Partidas Perdidas: <span id="partidas-perdidas">0</span></div>
+        <div>Win Ratio: <span id="win-ratio">0%</span></div>
+        <button onclick="sumarVictoria()">Sumar Victoria</button>
+        <button onclick="sumarDerrota()">Sumar Derrota</button>
+        <button onclick="reiniciarMarcador()">Reiniciar</button>
+    </div>
+
+    <script>
+        // Obtener los valores guardados en localStorage o inicializar en 0
+        let totalPartidas = parseInt(localStorage.getItem('totalPartidas')) || 0;
+        let partidasGanadas = parseInt(localStorage.getItem('partidasGanadas')) || 0;
+        let partidasPerdidas = parseInt(localStorage.getItem('partidasPerdidas')) || 0;
+
+        // Actualizar el DOM con los valores guardados
+        document.getElementById('total-partidas').textContent = totalPartidas;
+        document.getElementById('partidas-ganadas').textContent = partidasGanadas;
+        document.getElementById('partidas-perdidas').textContent = partidasPerdidas;
+        actualizarWinRatio();
+
+        function sumarVictoria() {
+            partidasGanadas++;
+            totalPartidas++;
+            guardarYActualizar();
+        }
+
+        function sumarDerrota() {
+            partidasPerdidas++;
+            totalPartidas++;
+            guardarYActualizar();
+        }
+
+        function reiniciarMarcador() {
+            totalPartidas = 0;
+            partidasGanadas = 0;
+            partidasPerdidas = 0;
+            guardarYActualizar();
+        }
+
+        function guardarYActualizar() {
+            // Guardar los valores en localStorage
+            localStorage.setItem('totalPartidas', totalPartidas);
+            localStorage.setItem('partidasGanadas', partidasGanadas);
+            localStorage.setItem('partidasPerdidas', partidasPerdidas);
+
+            // Actualizar el DOM
+            document.getElementById('total-partidas').textContent = totalPartidas;
+            document.getElementById('partidas-ganadas').textContent = partidasGanadas;
+            document.getElementById('partidas-perdidas').textContent = partidasPerdidas;
+            actualizarWinRatio();
+        }
+
+        function actualizarWinRatio() {
+            const winRatio = totalPartidas === 0 ? 0 : ((partidasGanadas / totalPartidas) * 100).toFixed(2);
+            document.getElementById('win-ratio').textContent = winRatio + '%';
+        }
+    </script>
+</body>
+</html>
